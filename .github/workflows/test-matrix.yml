@@ -10,11 +10,11 @@ jobs:
       fail-fast: false
       matrix:
         node: [12, 14]
-        os: [ubuntu-latest]
+        os: [self-hosted]
         experimental: [false]
         include:
           - node: 18
-            os: ubuntu-latest
+            os: self-hosted
             experimental: true
 
     steps:
@@ -25,6 +25,13 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node }}
+
+      - name: Show runner info
+        run: |
+          echo "Running on self-hosted runner"
+          echo "OS: ${{ runner.os }}"
+          echo "Runner name: ${{ runner.name }}"
+          echo "Labels: ${{ runner.labels }}"
 
       - name: Run custom internal action
         uses: ./my-action
