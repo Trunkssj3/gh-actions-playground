@@ -4,27 +4,44 @@ on: [push]
 
 jobs:
   test-matrix:
-    runs-on: ${{ matrix.os }}
-    continue-on-error: ${{ matrix.experimental }}
     strategy:
       fail-fast: false
       matrix:
         node: [12, 14]
-        os: [ubuntu-latest]
+        os: [ubuntu-latest, self-hosted]
         experimental: [false]
         include:
           - node: 18
             os: ubuntu-latest
             experimental: true
 
+    runs-on: ${{ matrix.os }}
+    continue-on-error: ${{ matrix.experimental }}
+
     steps:
+      - name: Show runner type
+        run: |
+          if [[ "${{ runner.name }}" == *"self-hosted"* ]]; then
+            echo "✅ Running on SELF-HOSTED runner: ${{ runner.name }}"
+          else
+            echo "🚀 Running on GITHUB-HOSTED runner: ${{ runner.name }}"
+          fi
+
       - name: Setup Node.js ${{ matrix.node }}
         uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node }}
 
-      - name: Run script
+      - name: Print Node Version
+        run: node --version
+
+      - name: Show GitHub Context
         run: |
-          echo "Running on Node ${{ matrix.node }}"
-          node --version
+          echo "Event:        ${{ github.event_name }}"
+          echo "Repository:   ${{ github.repository }}"
+          echo "Actor:        ${{ github.actor }}"
+          echo "Branch Ref:   ${{ github.ref }}"
+
+      - name: Run internal action
+        uses: ./my-action
 
