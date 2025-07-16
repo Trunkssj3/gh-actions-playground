@@ -1,0 +1,21 @@
+name: Matrix Node Version Test
+
+on: [push]
+
+jobs:
+  test-matrix:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        node: [12, 14, 16]
+        os: [ubuntu-latest, windows-latest]
+
+    steps:
+      - name: Setup Node.js ${{ matrix.node }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node }}
+
+      - name: Print version
+        run: node --version
+
