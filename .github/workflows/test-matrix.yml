@@ -1,4 +1,4 @@
-#name: Matrix Node Version Test
+name: Matrix Node Version Test
 
 on: [push]
 
