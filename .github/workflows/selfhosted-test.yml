@@ -1,0 +1,14 @@
+name: Test Self-Hosted Runner
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  simple-job:
+    runs-on: self-hosted
+
+    steps:
+      - name: Echo test
+        run: echo "✅ Hello from self-hosted runner"
+
