@@ -1,0 +1,8 @@
+name: My Internal Action
+description: Echo something cool
+runs:
+  using: "composite"
+  steps:
+    - run: echo "🧪 This is my custom internal action!"
+      shell: bash
+
