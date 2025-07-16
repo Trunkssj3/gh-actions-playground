@@ -5,10 +5,17 @@ on: [push]
 jobs:
   test-matrix:
     runs-on: ${{ matrix.os }}
+    continue-on-error: ${{ matrix.experimental }}
     strategy:
+      fail-fast: false
       matrix:
-        node: [12, 14, 16]
-        os: [ubuntu-latest, windows-latest]
+        node: [12, 14]
+        os: [ubuntu-latest]
+        experimental: [false]
+        include:
+          - node: 18
+            os: ubuntu-latest
+            experimental: true
 
     steps:
       - name: Setup Node.js ${{ matrix.node }}
@@ -16,6 +23,8 @@ jobs:
         with:
           node-version: ${{ matrix.node }}
 
-      - name: Print version
-        run: node --version
+      - name: Run script
+        run: |
+          echo "Running on Node ${{ matrix.node }}"
+          node --version
 
